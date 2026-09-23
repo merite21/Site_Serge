@@ -10,6 +10,6 @@
  * sur les règles d'accès (RLS) définies dans supabase/schema.sql.
  */
 window.CONFIG = {
-  supabaseUrl: "",
-  supabaseAnonKey: "",
+  supabaseUrl: "https://nqrnjrpfxxhfwpraxpmu.supabase.co",
+  supabaseAnonKey: "sb_publishable_xzh0lFGTLvW5atcZL38hNg_yI2uDD4K",
 };

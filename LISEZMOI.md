@@ -46,7 +46,11 @@ Pour passer d'un mode à l'autre, il suffit de remplir ou de vider `assets/js/co
 
 ## Tableau de bord en ligne (mode base de données)
 
-Mise en place, une seule fois :
+> ✅ **Déjà en place pour ce site** : projet Supabase `site-serge` (organisation « Ets Serge », région Paris),
+> base installée, 23 articles chargés, `assets/js/config.js` rempli. Il ne reste que les étapes 3 et 4
+> (créer le compte du propriétaire et lui donner les droits administrateur).
+
+Mise en place, une seule fois (pour un nouveau projet) :
 
 1. Créer un compte et un projet gratuits sur [supabase.com](https://supabase.com).
 2. **SQL Editor** : coller le contenu de `supabase/schema.sql` et cliquer sur *Run*. Faire de même avec

@@ -70,12 +70,13 @@ create trigger produits_maj before update on public.produits for each row execut
 -- ---------- Sécurité (Row Level Security) ----------
 -- Tout le monde peut LIRE le catalogue ; seuls les comptes présents dans « admins » peuvent le MODIFIER.
 
+-- SECURITY INVOKER suffit : la politique « voir son statut » (plus bas) laisse chacun lire sa propre ligne.
 create or replace function public.est_admin() returns boolean
-language sql stable security definer set search_path = '' as $$
+language sql stable security invoker set search_path = '' as $$
   select exists (select 1 from public.admins where user_id = (select auth.uid()));
 $$;
-revoke all on function public.est_admin() from public;
-grant execute on function public.est_admin() to anon, authenticated;
+revoke all on function public.est_admin() from public, anon;
+grant execute on function public.est_admin() to authenticated;
 
 alter table public.boutique   enable row level security;
 alter table public.categories enable row level security;
