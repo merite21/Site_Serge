@@ -9,13 +9,23 @@ commander un article directement sur WhatsApp.
 | Fichier | Rôle |
 |---|---|
 | `index.html` | Le site que voient les clients |
-| `admin.html` | La page de gestion pour ajouter ou modifier les articles, les prix et les catégories |
-| `data/catalogue.js` | **Toutes les données** : boutique, catégories, articles, prix |
+| `admin.html` | Le **tableau de bord administrateur** : ajouter ou modifier des articles, des prix et des catégories |
+| `data/catalogue.js` | Les données du catalogue en mode fichier (et la copie de secours en mode base de données) |
+| `assets/js/config.js` | La connexion à la base de données : vide = mode fichier |
+| `supabase/` | Le script de création de la base (`schema.sql`) et le catalogue de départ (`seed.sql`) |
 | `images/` | Les photos des articles (facultatif) |
 | `assets/` | Le style (CSS) et les scripts (JS) : pas besoin d'y toucher |
 
-Il n'y a rien à installer : pas de base de données, pas de serveur ni de compilation. Le site
-s'ouvre même en double-cliquant sur `index.html`.
+Le site fonctionne de deux façons :
+
+| | **Mode fichier** (par défaut) | **Mode base de données** (recommandé) |
+|---|---|---|
+| Où sont les articles | `data/catalogue.js` | Supabase (base de données gratuite) |
+| Tableau de bord | Sans mot de passe ; il faut télécharger le fichier puis le déposer sur GitHub | **Avec connexion** ; chaque modification est **en ligne immédiatement** |
+| Photos | Déposées dans `images/` | **Envoyées depuis le téléphone** |
+| Mise en place | Aucune | Environ 10 minutes (voir plus bas) |
+
+Pour passer d'un mode à l'autre, il suffit de remplir ou de vider `assets/js/config.js`.
 
 ## Liens à envoyer aux clients
 
@@ -25,7 +35,40 @@ s'ouvre même en double-cliquant sur `index.html`.
 - Un article précis : bouton 🔗 sur la fiche de l'article (le lien est copié automatiquement)
 - Une recherche : `https://votre-site/?q=cable`
 
-## Mettre à jour les articles et les prix
+## Tableau de bord (`admin.html`)
+
+- **Résumé** : nombre d'articles, de catégories, d'articles en rupture et d'articles sans prix de gros.
+- **Onglet Articles** : les prix (détail, gros, quantité minimum) et la disponibilité se modifient directement
+  dans le tableau. « + Nouvel article » ouvre la fiche complète : nom, catégorie, description, unité, prix, photo.
+  ✏️ pour modifier, ⧉ pour dupliquer, 🗑 pour supprimer.
+- **Onglet Catégories** : ajouter (ex. Carrelage), renommer, changer l'icône, changer l'ordre d'affichage.
+- **Onglet Boutique** : nom, numéro WhatsApp, téléphone, adresse, devise.
+
+## Tableau de bord en ligne (mode base de données)
+
+Mise en place, une seule fois :
+
+1. Créer un compte et un projet gratuits sur [supabase.com](https://supabase.com).
+2. **SQL Editor** : coller le contenu de `supabase/schema.sql` et cliquer sur *Run*. Faire de même avec
+   `supabase/seed.sql` pour charger le catalogue de départ.
+3. **Authentication → Users → Add user** : créer le compte du propriétaire (e-mail et mot de passe).
+   Dans **Authentication → Sign In / Providers**, désactiver *Allow new users to sign up*.
+4. Donner les droits administrateur à ce compte. Dans le **SQL Editor** :
+   ```sql
+   insert into public.admins (user_id)
+   select id from auth.users where email = 'email-du-proprietaire@exemple.com';
+   ```
+5. **Project Settings → API** : copier *Project URL* et la clé *anon / publishable* dans `assets/js/config.js`.
+6. Publier le site. Le propriétaire ouvre ensuite `https://votre-site/admin.html` et se connecte.
+
+Sécurité : tout le monde peut **lire** le catalogue, mais seuls les comptes listés dans `admins` peuvent le
+**modifier**. Ces règles sont appliquées par la base elle-même (RLS), pas seulement par la page. La clé
+*anon* peut donc être publique sans risque. Ne jamais mettre la clé *service_role* dans le site.
+
+Si la base est injoignable, la vitrine affiche la copie de `data/catalogue.js` au lieu d'une page vide.
+Pour régénérer `seed.sql` à partir de `data/catalogue.js` : `node outils/generer-seed.js`.
+
+## Mettre à jour les articles et les prix (mode fichier)
 
 1. Ouvrir `admin.html` (en local ou sur le site en ligne).
 2. Modifier les éléments voulus :
@@ -56,8 +99,9 @@ image fonctionne aussi. Sans photo, l'icône de la catégorie s'affiche.
 
 Un nom de domaine personnalisé (ex. `ets-serge.com`) peut ensuite être branché depuis l'hébergeur.
 
-> ⚠️ La page `admin.html` ne publie rien toute seule : elle produit seulement un fichier. Seule une
-> personne qui a accès au dépôt GitHub peut modifier le site en ligne.
+> ⚠️ En mode fichier, `admin.html` ne publie rien toute seule : elle produit seulement un fichier. Seule une
+> personne qui a accès au dépôt GitHub peut modifier le site en ligne. En mode base de données,
+> un mot de passe administrateur est exigé.
 
 ## À personnaliser avant la mise en ligne
 

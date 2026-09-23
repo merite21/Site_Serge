@@ -19,6 +19,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -148,6 +149,7 @@ main { padding-top: 16px; padding-bottom: 48px; scroll-margin-top: 130px; }
 
 .carte__actions { display: flex; gap: 8px; margin-top: 10px; }
 
+.chargement { color: var(--texte-doux); text-align: center; padding: 48px 16px; }
 .vide { text-align: center; padding: 48px 16px; color: var(--texte-doux); display: grid; gap: 16px; justify-items: center; }
 
 /* ---------- Pied ---------- */

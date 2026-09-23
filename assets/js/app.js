@@ -3,9 +3,8 @@
   "use strict";
 
   const { formatPrix, echapper, normaliser, formatDate, pluriel } = window.Commun;
-  const data = window.CATALOGUE;
-  const { boutique, categories, produits } = data;
-  const categorieParId = Object.fromEntries(categories.map((c) => [c.id, c]));
+  // Remplis au démarrage par Donnees.charger() (fichier ou base de données).
+  let boutique, categories, produits, categorieParId;
 
   const el = {
     nom: document.getElementById("boutique-nom"),
@@ -23,10 +22,7 @@
 
   const params = new URLSearchParams(location.search);
   const ancreInitiale = decodeURIComponent(location.hash.slice(1));
-  const etat = {
-    categorie: categorieParId[params.get("cat")] ? params.get("cat") : "",
-    recherche: params.get("q") || "",
-  };
+  const etat = { categorie: "", recherche: params.get("q") || "" };
 
   /* ---------- Liens de contact ---------- */
 
@@ -238,16 +234,32 @@
 
   /* ---------- Démarrage ---------- */
 
-  afficherBoutique();
-  el.recherche.value = etat.recherche;
-  rafraichir();
+  async function demarrer() {
+    let data;
+    try {
+      data = await window.Donnees.charger();
+    } catch (err) {
+      // Base injoignable : on affiche le catalogue du fichier plutôt qu'une page vide.
+      console.warn("Catalogue en ligne indisponible, repli sur data/catalogue.js :", err);
+      data = structuredClone(window.CATALOGUE);
+    }
+    ({ boutique, categories, produits } = data);
+    categorieParId = Object.fromEntries(categories.map((c) => [c.id, c]));
+    if (categorieParId[params.get("cat")]) etat.categorie = params.get("cat");
 
-  // Lien direct vers un article (#id) : le mettre en évidence.
-  if (ancreInitiale) {
-    const cible = document.getElementById(ancreInitiale);
-    if (cible) {
-      cible.classList.add("carte--cible");
-      setTimeout(() => cible.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+    afficherBoutique();
+    el.recherche.value = etat.recherche;
+    rafraichir();
+
+    // Lien direct vers un article (#id) : le mettre en évidence.
+    if (ancreInitiale) {
+      const cible = document.getElementById(ancreInitiale);
+      if (cible) {
+        cible.classList.add("carte--cible");
+        setTimeout(() => cible.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+      }
     }
   }
+
+  demarrer();
 })();
