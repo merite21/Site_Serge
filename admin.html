@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Gestion du catalogue</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur entete__contenu">
+      <div>
+        <h1 class="entete__nom">Gestion du catalogue</h1>
+        <p class="entete__slogan">Modifiez les articles et les prix, puis téléchargez le fichier et publiez-le.</p>
+      </div>
+      <div class="entete__actions">
+        <a class="bouton bouton--clair" href="index.html" target="_blank">👁️ Voir le site</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="conteneur admin">
+    <div class="alerte" id="alerte-brouillon" hidden>
+      <span>✏️ Modifications non publiées en cours (enregistrées dans ce navigateur).</span>
+      <button type="button" class="lien" id="btn-annuler-brouillon">Tout annuler</button>
+    </div>
+
+    <section class="panneau etapes">
+      <h2>Comment mettre à jour le site</h2>
+      <ol>
+        <li>Modifiez les informations, catégories et articles ci-dessous.</li>
+        <li>Cliquez sur <strong>« Télécharger catalogue.js »</strong>.</li>
+        <li>Remplacez le fichier <code>data/catalogue.js</code> du site par celui téléchargé (voir le fichier LISEZMOI).</li>
+      </ol>
+      <div class="etapes__actions">
+        <button type="button" class="bouton bouton--principal" id="btn-exporter">⬇️ Télécharger catalogue.js</button>
+        <label class="bouton bouton--secondaire">
+          📂 Ouvrir un fichier catalogue
+          <input type="file" id="btn-importer" accept=".js,.json" hidden>
+        </label>
+      </div>
+    </section>
+
+    <section class="panneau">
+      <h2>Informations de la boutique</h2>
+      <form id="form-boutique" class="formulaire formulaire--grille">
+        <label>Nom de la boutique<input name="nom" required></label>
+        <label>Slogan<input name="slogan"></label>
+        <label>Numéro WhatsApp <small>(avec indicatif, ex. 22997000000)</small><input name="whatsapp" inputmode="tel" required></label>
+        <label>Téléphone affiché<input name="telephone" inputmode="tel"></label>
+        <label>Adresse<input name="adresse"></label>
+        <label>Devise<input name="devise" required></label>
+      </form>
+    </section>
+
+    <section class="panneau">
+      <div class="panneau__entete">
+        <h2>Catégories</h2>
+        <button type="button" class="bouton bouton--secondaire" id="btn-ajout-categorie">+ Nouvelle catégorie</button>
+      </div>
+      <p class="aide">L'ordre ici est l'ordre d'affichage sur le site. Utilisez ↑ ↓ pour le changer.</p>
+      <div id="liste-categories" class="liste-categories"></div>
+    </section>
+
+    <section class="panneau">
+      <div class="panneau__entete">
+        <h2>Articles <span class="compteur" id="compteur-articles"></span></h2>
+        <button type="button" class="bouton bouton--principal" id="btn-ajout-produit">+ Nouvel article</button>
+      </div>
+      <div class="filtres-admin">
+        <input type="search" id="filtre-texte" placeholder="Rechercher un article…">
+        <select id="filtre-categorie"><option value="">Toutes les catégories</option></select>
+      </div>
+      <div class="table-defilante">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Article</th>
+              <th>Catégorie</th>
+              <th class="num">Prix détail</th>
+              <th class="num">Prix gros</th>
+              <th class="num">Qté min. gros</th>
+              <th>Dispo.</th>
+              <th><span class="visuellement-cache">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="liste-produits"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Fenêtre d'édition d'un article -->
+  <dialog id="dialog-produit" class="dialog">
+    <form method="dialog" id="form-produit" class="formulaire">
+      <h2 id="dialog-produit-titre">Article</h2>
+      <label>Nom de l'article *<input name="nom" required></label>
+      <label>Catégorie *<select name="categorie" required></select></label>
+      <label>Description<textarea name="description" rows="2"></textarea></label>
+      <div class="formulaire--grille">
+        <label>Unité de vente <small>(sac, pièce, barre, m²…)</small><input name="unite" required list="unites"></label>
+        <label>Prix détail *<input name="prixDetail" type="number" min="0" step="1" inputmode="numeric" required></label>
+        <label>Prix gros <small>(vide = sur demande)</small><input name="prixGros" type="number" min="0" step="1" inputmode="numeric"></label>
+        <label>Quantité min. pour le gros<input name="qteMinGros" type="number" min="1" step="1" inputmode="numeric"></label>
+      </div>
+      <label>Photo <small>(chemin ex. images/frigo.jpg, ou lien internet — facultatif)</small><input name="image"></label>
+      <label class="case"><input type="checkbox" name="disponible"> Disponible en stock</label>
+      <p class="erreur" id="erreur-produit" role="alert"></p>
+      <div class="dialog__actions">
+        <button type="button" class="bouton bouton--secondaire" data-fermer>Annuler</button>
+        <button type="submit" class="bouton bouton--principal" value="ok">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <datalist id="unites">
+    <option value="pièce"><option value="sac"><option value="barre"><option value="rouleau">
+    <option value="carton"><option value="m²"><option value="m"><option value="kg"><option value="tonne">
+    <option value="seau"><option value="pot"><option value="feuille"><option value="paquet"><option value="lot">
+  </datalist>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data/catalogue.js"></script>
+  <script src="assets/js/commun.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalogue</title>
+  <meta name="description" content="Catalogue et prix : électroménager, ciment, électricité, plomberie, fer, peinture, quincaillerie. Vente en gros et en détail.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Notre catalogue et nos prix">
+  <meta property="og:description" content="Électroménager, ciment, électricité et plus. Vente en gros et en détail.">
+  <meta name="theme-color" content="#0f5132">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏪</text></svg>">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur entete__contenu">
+      <div>
+        <h1 class="entete__nom" id="boutique-nom">Catalogue</h1>
+        <p class="entete__slogan" id="boutique-slogan"></p>
+      </div>
+      <div class="entete__actions">
+        <a class="bouton bouton--whatsapp" id="lien-whatsapp" href="#" target="_blank" rel="noopener">
+          <span aria-hidden="true">💬</span> WhatsApp
+        </a>
+        <a class="bouton bouton--clair" id="lien-appel" href="#">
+          <span aria-hidden="true">📞</span> Appeler
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="barre" id="barre">
+    <div class="conteneur">
+      <label class="recherche">
+        <span class="visuellement-cache">Rechercher un article</span>
+        <span class="recherche__icone" aria-hidden="true">🔍</span>
+        <input type="search" id="recherche" placeholder="Rechercher un article (ex. ciment, câble, frigo…)" autocomplete="off">
+      </label>
+      <nav class="categories" id="categories" aria-label="Catégories"></nav>
+    </div>
+  </div>
+
+  <main class="conteneur">
+    <div class="info-prix">
+      <span><strong>Détail</strong> : prix à l'unité</span>
+      <span><strong>Gros</strong> : prix à l'unité à partir de la quantité indiquée</span>
+    </div>
+    <p class="resultat" id="resultat" aria-live="polite"></p>
+    <div id="catalogue"></div>
+  </main>
+
+  <footer class="pied">
+    <div class="conteneur">
+      <p id="pied-contact"></p>
+      <p id="pied-maj" class="pied__maj"></p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data/catalogue.js"></script>
+  <script src="assets/js/commun.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

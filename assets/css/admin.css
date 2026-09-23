@@ -1,0 +1,86 @@
+/* Styles spécifiques à la page d'administration (en complément de style.css). */
+.admin { display: grid; gap: 16px; padding-top: 20px; }
+
+.panneau { background: var(--surface); border-radius: var(--rayon); box-shadow: var(--ombre); padding: 18px; }
+.panneau h2 { font-size: 1.15rem; margin-bottom: 12px; }
+.panneau__entete { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.panneau__entete h2 { margin: 0; }
+.compteur { color: var(--texte-doux); font-weight: 500; }
+.aide { color: var(--texte-doux); font-size: .85rem; }
+.centre { text-align: center; padding: 20px; }
+
+.etapes ol { margin: 0 0 14px; padding-left: 20px; }
+.etapes li { margin-bottom: 4px; }
+.etapes code { background: var(--fond); padding: 1px 6px; border-radius: 6px; }
+.etapes__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.bouton--principal { background: var(--primaire); color: #fff; }
+.bouton--principal:hover { background: #146c43; }
+.bouton--secondaire { background: var(--surface); color: var(--texte); border-color: var(--bordure); }
+.bouton--secondaire:hover { border-color: var(--primaire); }
+
+.alerte {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;
+  background: #fff7e6; border: 1px solid #fcd34d; border-radius: 10px; padding: 10px 14px; font-size: .9rem;
+}
+.alerte[hidden] { display: none; }
+
+.lien { background: none; border: 0; padding: 0; font: inherit; color: var(--primaire); text-decoration: underline; cursor: pointer; text-align: left; }
+.lien--fort { font-weight: 600; text-decoration: none; }
+.lien--fort:hover { text-decoration: underline; }
+
+/* ---------- Formulaires ---------- */
+.formulaire { display: grid; gap: 12px; }
+.formulaire--grille { display: grid; gap: 12px; align-items: end; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.formulaire label { display: grid; gap: 4px; font-size: .9rem; font-weight: 600; }
+.formulaire small { font-weight: 400; color: var(--texte-doux); }
+.formulaire input:not([type="checkbox"]), .formulaire select, .formulaire textarea,
+.filtres-admin input, .filtres-admin select {
+  font: inherit; font-weight: 400; padding: 9px 12px; border: 1px solid var(--bordure); border-radius: 10px;
+  background: var(--surface); width: 100%;
+}
+.formulaire .case { display: flex; align-items: center; gap: 8px; }
+.formulaire .case input { width: 18px; height: 18px; }
+.erreur { color: var(--danger); font-size: .9rem; min-height: 1em; }
+
+/* ---------- Catégories ---------- */
+.liste-categories { display: grid; gap: 8px; }
+.ligne-categorie { display: flex; align-items: center; gap: 8px; }
+.ligne-categorie input { font: inherit; padding: 8px 10px; border: 1px solid var(--bordure); border-radius: 8px; }
+.ligne-categorie__icone { width: 52px; text-align: center; }
+.ligne-categorie__nom { flex: 1; min-width: 0; }
+.ligne-categorie__nb { font-size: .8rem; color: var(--texte-doux); white-space: nowrap; }
+
+.bouton-mini {
+  min-width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--bordure);
+  background: var(--surface); cursor: pointer; font-size: .95rem;
+}
+.bouton-mini:hover:not(:disabled) { background: var(--fond); }
+.bouton-mini:disabled { opacity: .35; cursor: default; }
+.bouton-mini--danger:hover:not(:disabled) { background: #fee2e2; border-color: #fca5a5; }
+
+/* ---------- Tableau des articles ---------- */
+.filtres-admin { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-bottom: 12px; }
+.table-defilante { overflow-x: auto; border: 1px solid var(--bordure); border-radius: 10px; }
+.table { width: 100%; border-collapse: collapse; font-size: .9rem; min-width: 760px; }
+.table th, .table td { padding: 8px 10px; border-bottom: 1px solid var(--bordure); text-align: left; vertical-align: middle; }
+.table th { background: var(--fond); font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--texte-doux); position: sticky; top: 0; }
+.table tr:last-child td { border-bottom: 0; }
+.table .num { text-align: right; }
+.table td.num input { width: 110px; text-align: right; font: inherit; padding: 6px 8px; border: 1px solid transparent; border-radius: 6px; background: var(--fond); font-variant-numeric: tabular-nums; }
+.table td.num input:hover, .table td.num input:focus { border-color: var(--bordure); background: var(--surface); }
+.table input[type="checkbox"] { width: 18px; height: 18px; }
+.table .actions { white-space: nowrap; text-align: right; }
+.ligne--rupture td:first-child { opacity: .55; }
+
+/* ---------- Fenêtre ---------- */
+.dialog { border: 0; border-radius: var(--rayon); padding: 22px; width: min(640px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgb(0 0 0 / .25); }
+.dialog::backdrop { background: rgb(0 0 0 / .45); }
+.dialog h2 { font-size: 1.2rem; }
+.dialog__actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+@media (max-width: 600px) {
+  .filtres-admin { grid-template-columns: 1fr; }
+  .ligne-categorie { flex-wrap: wrap; }
+  .ligne-categorie__nb { order: 5; width: 100%; }
+}
